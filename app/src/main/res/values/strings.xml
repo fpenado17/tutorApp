@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TutorApp</string>
+
+    <string name="nav_info_universidad">Universidad de El Salvador</string>
 </resources>
