@@ -1,10 +1,10 @@
 package com.example.tutorapp.ui.screen.inicio.components
 
-import CarouselItem
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,14 +14,24 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
 
 @Composable
-fun ImagenCarrusel(items: List<CarouselItem>) {
-    val pagerState = rememberPagerState()
+fun ImagenCarrusel(items: List<com.example.tutorapp.data.model.CarouselItem>) {
+    val pagerState = rememberPagerState(initialPage = 0)
+
+    // Efecto para auto-desplazamiento
+    LaunchedEffect(key1 = pagerState) {
+        while (true) {
+            delay(5000L)
+            val nextPage = (pagerState.currentPage + 1) % items.size
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
 
     Column {
         HorizontalPager(
-            count = items.size,  // Cambiar pageCount por count
+            count = items.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
@@ -30,13 +40,13 @@ fun ImagenCarrusel(items: List<CarouselItem>) {
             val item = items[page]
             Box(modifier = Modifier.fillMaxSize()) {
                 AsyncImage(
-                    model = item.imageUrl,
-                    contentDescription = item.description ?: "",
+                    model = item.imagen,
+                    contentDescription = item.descripcion ?: "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
                 Text(
-                    text = item.description ?: "",
+                    text = item.descripcion ?: "",
                     color = Color.White,
                     modifier = Modifier
                         .align(Alignment.BottomStart)

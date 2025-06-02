@@ -1,5 +1,6 @@
 package com.example.tutorapp.ui.screen.inicio
 
+import AppTopBar
 import BottomNavBar
 import InicioScreen
 import androidx.compose.foundation.layout.padding
@@ -10,12 +11,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalContext
+import com.example.tutorapp.ui.screen.informacion.InformacionScreen
+import com.example.tutorapp.ui.screen.mapas.MapaScreen
+import com.example.tutorapp.ui.screen.procesos.ProcesoScreen
+import com.example.tutorapp.ui.screen.sesion.SesionScreen
 
 @Composable
 fun AppMainContent() {
     val navController = rememberNavController()
 
     Scaffold(
+        topBar = {
+            AppTopBar()
+        },
         bottomBar = {
             BottomNavBar(navController)
         }
@@ -26,14 +34,14 @@ fun AppMainContent() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("inicio") { InicioScreen() }
-            composable("procesos") { InicioScreen() } // ProcesoScreen()
-            composable("mapas") { InicioScreen() } // MapaScreen()
+            composable("procesos") { ProcesoScreen() }
+            composable("mapas") { MapaScreen() }
             //composable("sesion") {
             //    if (sesionIniciada(LocalContext.current)) UsuarioScreen() // UsuarioScreen()
             //    else InicioSesionScreen() // InicioSesionScreen()
             // }
-            composable("sesion") { InicioScreen()}
-            composable("informacion") { InicioScreen() } // InformacionScreen()
+            composable("sesion") { SesionScreen() }
+            composable("informacion") { InformacionScreen() }
         }
     }
 }

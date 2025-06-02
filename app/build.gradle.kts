@@ -59,5 +59,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.coil.compose)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.gson)
 }

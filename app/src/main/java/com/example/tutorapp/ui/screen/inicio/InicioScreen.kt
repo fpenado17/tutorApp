@@ -8,51 +8,90 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tutorapp.ui.screen.inicio.InicioViewModel
 import com.example.tutorapp.ui.screen.inicio.components.ImagenCarrusel
 import com.example.tutorapp.ui.screen.inicio.components.TarjetasCarrusel
+import kotlinx.coroutines.delay
+import androidx.compose.runtime.setValue
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun InicioScreen() {
-    val listaCarruselInicio = listOf(
-        CarouselItem(
-            "https://web.ues.edu.sv/wp-content/uploads/sites/20/2021/06/BANNER-PAGINA-WEB-UES.jpg",
-            "Conoce los pasos a seguir del proceso universitario de 2022"
-        ),
-        CarouselItem(
-            "https://lapagina.com.sv/wp-content/uploads/2022/05/UES-oficial.jpg",
-            "Dirigido a todas las personas interesadas en participar del Proceso de Ingreso..."
-        ),
-        CarouselItem(
-            "https://eluniversitario.ues.edu.sv/wp-content/uploads/sites/11/2020/07/001.jpg",
-            "Se espera que participen más de 30,000 estudiantes"
-        )
-    )
+fun InicioScreen(viewModel: InicioViewModel = viewModel()) {
+    val generalItems = viewModel.generalItems.collectAsState()
+    val procesosItems = viewModel.procesosItems.collectAsState()
 
-    val listaCarruselProcesos = listOf(
-        CarouselItem(null, "Lorem ipsum", "Lorem ipsum dolor sit amet..."),
-        CarouselItem(null, "Cum sociis", "Cum sociis natoque penatibus..."),
-        CarouselItem(null, "Euismod lacinia", "Euismod lacinia at quis risus..."),
-    )
+    var generalTimeoutReached by remember { mutableStateOf(false) }
+    var procesosTimeoutReached by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.getInformacionPorTipo("General")
+        viewModel.getInformacionPorTipo("Procesos", 10)
+    }
+
+    LaunchedEffect(generalItems.value) {
+        if (generalItems.value.isEmpty()) {
+            delay(5000)
+            if (generalItems.value.isEmpty()) generalTimeoutReached = true
+        }
+    }
+
+    LaunchedEffect(procesosItems.value) {
+        if (procesosItems.value.isEmpty()) {
+            delay(5000)
+            if (procesosItems.value.isEmpty()) procesosTimeoutReached = true
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
 
         Text(
-            "Carrusel Inicio",
+            "Bienvenido a TutorApp",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(14.dp)
+                .align(Alignment.CenterHorizontally)
         )
-        ImagenCarrusel(listaCarruselInicio)
+        when {
+            generalItems.value.isNotEmpty() -> ImagenCarrusel(generalItems.value)
+            generalTimeoutReached -> Text(
+                "No se encontraron registros generales.",
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            else -> CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
 
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            "Carrusel Procesos",
+            "Procesos más buscados",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(14.dp)
         )
-        TarjetasCarrusel(listaCarruselProcesos)
+        when {
+            procesosItems.value.isNotEmpty() -> TarjetasCarrusel(procesosItems.value)
+            procesosTimeoutReached -> Text(
+                "No se encontraron procesos.",
+                modifier = Modifier
+                    .padding(start = 14.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            else -> CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+        }
     }
 }

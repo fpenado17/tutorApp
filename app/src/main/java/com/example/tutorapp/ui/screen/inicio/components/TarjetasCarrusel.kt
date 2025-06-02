@@ -1,10 +1,11 @@
 package com.example.tutorapp.ui.screen.inicio.components
 
-import CarouselItem
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,11 +14,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import com.example.tutorapp.ui.theme.RojoIntenso
+import com.example.tutorapp.ui.theme.RojoUES
+import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TarjetasCarrusel(items: List<CarouselItem>) {
-    val pagerState = rememberPagerState()
+fun TarjetasCarrusel(items: List<com.example.tutorapp.data.model.CarouselItem>) {
+    val pagerState = rememberPagerState(initialPage = 0)
+
+    LaunchedEffect(key1 = pagerState) {
+        while (true) {
+            delay(5000L)
+            val nextPage = (pagerState.currentPage + 1) % items.size
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
 
     HorizontalPager(
         count = items.size,
@@ -33,12 +46,36 @@ fun TarjetasCarrusel(items: List<CarouselItem>) {
                 .padding(8.dp)
                 .fillMaxHeight()
                 .fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFD32F2F))
+            colors = CardDefaults.cardColors(containerColor = if (page % 2 == 0) RojoUES else RojoIntenso)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(item.title, style = MaterialTheme.typography.titleMedium, color = Color.White)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = item.nombre,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
+                    )
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Búsquedas",
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = item.busqueda.toString(),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(item.description, style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                Text(item.descripcion ?: "", style = MaterialTheme.typography.bodyMedium, color = Color.White)
             }
         }
     }
