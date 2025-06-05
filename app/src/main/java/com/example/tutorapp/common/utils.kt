@@ -1,12 +1,16 @@
 package com.example.tutorapp.common
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap.Config
 import android.graphics.Canvas
+import android.speech.RecognizerIntent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.createBitmap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import java.util.Locale
 
 // Decodificar polyline Directions Google
 fun decodePolyline(encoded: String): List<LatLng> {
@@ -59,4 +63,17 @@ fun getBitmapDescriptorFromVector(context: Context, drawableName: String): Bitma
     drawable.draw(canvas)
 
     return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
+
+// Utilizar microfono
+fun startVoiceRecognition(
+    context: Context,
+    launcher: ActivityResultLauncher<Intent>
+) {
+    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        putExtra(RecognizerIntent.EXTRA_PROMPT, "Habla ahora...")
+    }
+    launcher.launch(intent)
 }

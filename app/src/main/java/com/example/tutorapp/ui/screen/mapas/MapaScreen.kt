@@ -1,13 +1,21 @@
 package com.example.tutorapp.ui.screen.mapas
 
 import InfoMapaDialog
+import android.app.Activity
+import android.speech.RecognizerIntent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -27,10 +36,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tutorapp.R
+import com.example.tutorapp.common.startVoiceRecognition
 import com.example.tutorapp.data.model.MapaItem
+import com.example.tutorapp.ui.screen.mapas.components.BusquedaBar
+import com.example.tutorapp.ui.screen.mapas.components.BusquedaBottomSheet
 import com.example.tutorapp.ui.screen.mapas.components.InfoMapaRuta
 import com.google.android.gms.location.LocationServices
 import com.example.tutorapp.ui.screen.mapas.components.RenderMapa
+import com.example.tutorapp.ui.theme.PrincipalAqua
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +66,25 @@ fun MapaScreen() {
     val rutaSteps = viewModel.rutaSteps
     val mostrarRuta by viewModel.mostrarRuta
     val rutaResultado by viewModel.ruta.collectAsState()
+    val textoBusqueda by viewModel.textoBusqueda.collectAsState()
+    var mostrarDialogoBusqueda by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var ubicacionSeleccionadaZoom by remember { mutableStateOf<MapaItem?>(null) }
+    val speechResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val spokenText = result.data
+                ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                ?.firstOrNull()
+
+            spokenText?.let {
+                viewModel.busquedaMapa(it)
+                mostrarDialogoBusqueda = true
+            }
+        }
+    }
+
 
     // Efectos
     LaunchedEffect(animarCamara) {
@@ -77,6 +109,17 @@ fun MapaScreen() {
             }
         } catch (e: SecurityException) {
             // Maneja el caso en que los permisos no han sido concedidos
+        }
+    }
+
+    LaunchedEffect(ubicacionSeleccionadaZoom) {
+        ubicacionSeleccionadaZoom?.let {
+            val latLng = LatLng(it.latitud, it.longitud)
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newLatLngZoom(latLng, 19f),
+                durationMs = 1000
+            )
+            ubicacionSeleccionadaZoom = null
         }
     }
 
@@ -113,6 +156,38 @@ fun MapaScreen() {
             )
         }
 
+        FloatingActionButton(
+            onClick = { animarCamara = true },
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(12.dp, 0.dp, 0.dp, 80.dp)
+                .size(56.dp)
+                .border(
+                    width = 1.dp,
+                    color = PrincipalAqua,
+                    shape = CircleShape
+                )
+                .clip(CircleShape),
+            containerColor = Color.White,
+            shape = CircleShape
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_filter),
+                contentDescription = "Filtros",
+                tint = Color.Black,
+
+            )
+        }
+
+        BusquedaBar(
+            textoBusqueda = textoBusqueda,
+            onClick = {mostrarDialogoBusqueda = true },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp),
+            onClickMic = { startVoiceRecognition(context, speechResultLauncher) },
+        )
+
         if (mostrarRuta && rutaResultado != null) {
             InfoMapaRuta(
                 rutaResultado = rutaResultado!!,
@@ -141,4 +216,24 @@ fun MapaScreen() {
             tipoUbicacion = ubicacion.tipo,
         )
     }
+
+    if (mostrarDialogoBusqueda) {
+        ModalBottomSheet(
+            onDismissRequest = { mostrarDialogoBusqueda = false },
+            sheetState = sheetState
+        ) {
+            BusquedaBottomSheet(
+                listaUbicaciones = ubicaciones,
+                onUbicacionSeleccionada = { ubicacion ->
+                    viewModel.busquedaMapa(ubicacion.nombre)
+                    mostrarDialogoBusqueda = false
+                    ubicacionSeleccionadaZoom = ubicacion
+                },
+                onCerrar = { mostrarDialogoBusqueda = false },
+                viewModel = viewModel,
+                onClickMic = { startVoiceRecognition(context, speechResultLauncher) }
+            )
+        }
+    }
+
 }

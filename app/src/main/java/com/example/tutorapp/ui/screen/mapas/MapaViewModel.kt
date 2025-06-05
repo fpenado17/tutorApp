@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-
 class MapaViewModel : ViewModel() {
     private val repository = MapaRepository()
 
@@ -31,6 +30,9 @@ class MapaViewModel : ViewModel() {
 
     private val _isLoading = mutableStateOf(false)
     val isLoading get() = _isLoading
+
+    private val _textoBusqueda = MutableStateFlow("")
+    val textoBusqueda: StateFlow<String> = _textoBusqueda
 
     init {
         cargarMarcadores()
@@ -61,5 +63,9 @@ class MapaViewModel : ViewModel() {
             _mostrarRuta.value = true
             _isLoading.value = false
         }
+    }
+
+    fun busquedaMapa(nuevoTexto: String) {
+        _textoBusqueda.value = nuevoTexto
     }
 }
