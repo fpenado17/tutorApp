@@ -1,34 +1,56 @@
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.tutorapp.R
+import com.example.tutorapp.ui.theme.PrincipalAqua
+import com.example.tutorapp.ui.theme.PrincipalGris
+import androidx.compose.ui.unit.dp
 
-data class BottomNavItem(val route: String, val icon: ImageVector, val label: String)
+data class BottomNavItem(val route: String, val icon: Painter, val label: String, val iconSelect: Painter,)
 
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
-        BottomNavItem("inicio", Icons.Default.Home, "Inicio"),
-        BottomNavItem("procesos", Icons.Default.List, "Procesos"),
-        BottomNavItem("mapas", Icons.Default.Place, "Mapa"),
-        BottomNavItem("sesion", Icons.Default.Person, "Sesión"),
-        BottomNavItem("informacion", Icons.Default.Info, "Más")
+        BottomNavItem("inicio", painterResource(R.drawable.ic_inicio), "Inicio", painterResource(R.drawable.ic_inicio_seleccionado)),
+        BottomNavItem("procesos", painterResource(R.drawable.ic_academico), "Procesos", painterResource(R.drawable.ic_academico_seleccionado)),
+        BottomNavItem("mapas", painterResource(R.drawable.ic_mapa), "Mapa", painterResource(R.drawable.ic_mapa_seleccionado)),
+        BottomNavItem("sesion", painterResource(R.drawable.ic_inicio_sesion), "Sesión", painterResource(R.drawable.ic_inicio_sesion_seleccionado)),
+        BottomNavItem("informacion", painterResource(R.drawable.ic_otros), "Más", painterResource(R.drawable.ic_otros_seleccionado))
     )
 
-    NavigationBar {
-        val navBackStackEntry = navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry.value?.destination?.route
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry.value?.destination?.route
 
+    NavigationBar(
+        containerColor = PrincipalGris
+    ) {
         items.forEach { item ->
+            val selected = currentRoute == item.route
+
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(item.label) },
-                selected = currentRoute == item.route,
+                icon = {
+                    Image(
+                        painter = if (selected) item.iconSelect else item.icon,
+                        contentDescription = item.label,
+                        modifier = Modifier.size(24.dp),
+                    )
+                },
+                label = {
+                    if (selected) Text(text = item.label, color = White)
+                },
+                selected = selected,
                 onClick = {
-                    if (currentRoute != item.route) {
+                    if (!selected) {
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
@@ -37,7 +59,14 @@ fun BottomNavBar(navController: NavController) {
                             restoreState = true
                         }
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = PrincipalGris,
+                    selectedIconColor = PrincipalAqua,
+                    unselectedIconColor = White,
+                    selectedTextColor = White,
+                    unselectedTextColor = White
+                )
             )
         }
     }

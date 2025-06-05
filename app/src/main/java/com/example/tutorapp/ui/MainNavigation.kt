@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalContext
 import com.example.tutorapp.ui.screen.informacion.InformacionScreen
-import com.example.tutorapp.ui.screen.mapas.MapaScreen
+import com.example.tutorapp.ui.screen.mapas.MapaScreenConPermisos
 import com.example.tutorapp.ui.screen.procesos.ProcesoScreen
 import com.example.tutorapp.ui.screen.sesion.SesionScreen
 
@@ -35,7 +35,7 @@ fun AppMainContent() {
         ) {
             composable("inicio") { InicioScreen() }
             composable("procesos") { ProcesoScreen() }
-            composable("mapas") { MapaScreen() }
+            composable("mapas") { MapaScreenConPermisos() }
             //composable("sesion") {
             //    if (sesionIniciada(LocalContext.current)) UsuarioScreen() // UsuarioScreen()
             //    else InicioSesionScreen() // InicioSesionScreen()
