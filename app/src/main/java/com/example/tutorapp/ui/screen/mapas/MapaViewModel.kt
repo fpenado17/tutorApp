@@ -34,14 +34,19 @@ class MapaViewModel : ViewModel() {
     private val _textoBusqueda = MutableStateFlow("")
     val textoBusqueda: StateFlow<String> = _textoBusqueda
 
+    private val _filtrosSeleccionados = MutableStateFlow<List<String>>(emptyList())
+    val filtrosSeleccionados: StateFlow<List<String>> = _filtrosSeleccionados
+
     init {
-        cargarMarcadores()
+        val filtrosIniciales = listOf("Facultad", "Salud", "Comedor")
+        _filtrosSeleccionados.value = filtrosIniciales
+        cargarMarcadores(filtrosIniciales)
     }
 
-    fun cargarMarcadores() {
+    fun cargarMarcadores(tipos: List<String> = listOf("Facultad", "Salud", "Comedor")) {
         viewModelScope.launch {
             try {
-                val lista = repository.getUbicaciones()
+                val lista = repository.getUbicaciones(tipos)
                 _marcadores.value = lista
             } catch (e: Exception) {
                 _marcadores.value = emptyList()
@@ -67,5 +72,10 @@ class MapaViewModel : ViewModel() {
 
     fun busquedaMapa(nuevoTexto: String) {
         _textoBusqueda.value = nuevoTexto
+    }
+
+    fun actualizarFiltros(nuevosFiltros: List<String>) {
+        _filtrosSeleccionados.value = nuevosFiltros
+        cargarMarcadores(nuevosFiltros)
     }
 }

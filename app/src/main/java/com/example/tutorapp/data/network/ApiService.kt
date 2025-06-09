@@ -15,5 +15,7 @@ interface ApiService {
     ): List<CarouselItem>
 
     @GET("public/ubicacion/")
-    suspend fun getUbicaciones(): List<MapaItem>
+    suspend fun getUbicaciones(
+        @Query("tipo") tipos: List<String>
+    ): List<MapaItem>
 }

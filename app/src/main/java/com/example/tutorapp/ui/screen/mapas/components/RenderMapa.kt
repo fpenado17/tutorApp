@@ -7,12 +7,12 @@ import androidx.compose.ui.Modifier
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.example.tutorapp.ui.theme.PrincipalAqua
 import android.content.Context
 import com.example.tutorapp.R
 import com.example.tutorapp.common.decodePolyline
 import com.example.tutorapp.common.getBitmapDescriptorFromVector
 import com.example.tutorapp.data.model.MapaItem
+import com.example.tutorapp.ui.theme.RojoUES
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
@@ -87,7 +87,7 @@ fun RenderMapa(
 
             Polyline(
                 points = polylinePoints,
-                color = PrincipalAqua,
+                color = RojoUES,
                 width = 8f
             )
         }

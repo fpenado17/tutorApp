@@ -15,9 +15,9 @@ import java.net.URL
 class MapaRepository {
     private val api = RetrofitClient.apiService
 
-    suspend fun getUbicaciones(): List<MapaItem> {
+    suspend fun getUbicaciones(tipos: List<String>): List<MapaItem> {
         return try {
-            api.getUbicaciones()
+            api.getUbicaciones(tipos)
         } catch (e: Exception) {
             Log.e("MapaRepository", "Error al llamar API", e)
             emptyList()

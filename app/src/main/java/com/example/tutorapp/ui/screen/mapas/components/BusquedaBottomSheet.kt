@@ -46,7 +46,6 @@ import com.example.tutorapp.data.model.MapaItem
 import com.example.tutorapp.ui.screen.mapas.MapaViewModel
 import com.example.tutorapp.R
 import com.example.tutorapp.ui.theme.PrincipalAqua
-import com.example.tutorapp.ui.theme.PrincipalGris
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -77,7 +76,6 @@ fun BusquedaBottomSheet(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = PrincipalGris, shape = RoundedCornerShape(8.dp))
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -108,6 +106,7 @@ fun BusquedaBottomSheet(
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = "Buscar",
+                        tint = PrincipalAqua
                     )
                 },
                 trailingIcon = {
@@ -134,7 +133,7 @@ fun BusquedaBottomSheet(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_outline_mic),
                     contentDescription = "Voz",
-                    tint = Color.White
+                    tint = PrincipalAqua
                 )
             }
         }

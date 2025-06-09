@@ -40,6 +40,7 @@ import com.example.tutorapp.common.startVoiceRecognition
 import com.example.tutorapp.data.model.MapaItem
 import com.example.tutorapp.ui.screen.mapas.components.BusquedaBar
 import com.example.tutorapp.ui.screen.mapas.components.BusquedaBottomSheet
+import com.example.tutorapp.ui.screen.mapas.components.FiltroBottomSheet
 import com.example.tutorapp.ui.screen.mapas.components.InfoMapaRuta
 import com.google.android.gms.location.LocationServices
 import com.example.tutorapp.ui.screen.mapas.components.RenderMapa
@@ -84,7 +85,8 @@ fun MapaScreen() {
             }
         }
     }
-
+    var mostrarDialogoFiltro by remember { mutableStateOf(false) }
+    val filtrosSeleccionados by viewModel.filtrosSeleccionados.collectAsState()
 
     // Efectos
     LaunchedEffect(animarCamara) {
@@ -157,7 +159,7 @@ fun MapaScreen() {
         }
 
         FloatingActionButton(
-            onClick = { animarCamara = true },
+            onClick = { mostrarDialogoFiltro = true },
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(12.dp, 0.dp, 0.dp, 80.dp)
@@ -232,6 +234,21 @@ fun MapaScreen() {
                 onCerrar = { mostrarDialogoBusqueda = false },
                 viewModel = viewModel,
                 onClickMic = { startVoiceRecognition(context, speechResultLauncher) }
+            )
+        }
+    }
+    if (mostrarDialogoFiltro) {
+        ModalBottomSheet(
+            onDismissRequest = { mostrarDialogoFiltro = false },
+            sheetState = sheetState
+        ) {
+            FiltroBottomSheet(
+                onAplicar = { filtrosSeleccionados ->
+                    viewModel.actualizarFiltros(filtrosSeleccionados)
+                    mostrarDialogoFiltro = false
+                },
+                onCerrar = { mostrarDialogoFiltro = false },
+                filtrosSeleccionados = viewModel.filtrosSeleccionados.collectAsState().value,
             )
         }
     }
