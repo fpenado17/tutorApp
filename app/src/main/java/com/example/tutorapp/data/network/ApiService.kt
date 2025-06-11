@@ -1,5 +1,6 @@
 package com.example.tutorapp.data.network
 import com.example.tutorapp.data.model.CarouselItem
+import com.example.tutorapp.data.model.CatTipoUbicacion
 import com.example.tutorapp.data.model.MapaItem
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -18,4 +19,7 @@ interface ApiService {
     suspend fun getUbicaciones(
         @Query("tipo") tipos: List<String>
     ): List<MapaItem>
+
+    @GET("public/tipo/ubicacion/")
+    suspend fun getTipoUbicacion(): List<CatTipoUbicacion>
 }

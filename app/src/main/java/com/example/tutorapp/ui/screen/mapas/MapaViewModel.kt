@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tutorapp.data.model.CatTipoUbicacion
 import com.example.tutorapp.data.model.MapaItem
 import com.example.tutorapp.data.model.RutaResultado
 import com.example.tutorapp.data.repository.MapaRepository
@@ -37,7 +38,11 @@ class MapaViewModel : ViewModel() {
     private val _filtrosSeleccionados = MutableStateFlow<List<String>>(emptyList())
     val filtrosSeleccionados: StateFlow<List<String>> = _filtrosSeleccionados
 
+    private val _catFiltros = MutableStateFlow<List<CatTipoUbicacion>>(emptyList())
+    val catFiltros: StateFlow<List<CatTipoUbicacion>> = _catFiltros
+
     init {
+        cargarCatFiltros()
         val filtrosIniciales = listOf("Facultad", "Salud", "Comedor")
         _filtrosSeleccionados.value = filtrosIniciales
         cargarMarcadores(filtrosIniciales)
@@ -67,6 +72,17 @@ class MapaViewModel : ViewModel() {
             // Muestra la ruta
             _mostrarRuta.value = true
             _isLoading.value = false
+        }
+    }
+
+    fun cargarCatFiltros() {
+        viewModelScope.launch {
+            try {
+                val lista = repository.getCatFiltros()
+                _catFiltros.value = lista
+            } catch (e: Exception) {
+                _catFiltros.value = emptyList()
+            }
         }
     }
 

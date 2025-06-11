@@ -86,7 +86,7 @@ fun MapaScreen() {
         }
     }
     var mostrarDialogoFiltro by remember { mutableStateOf(false) }
-    val filtrosSeleccionados by viewModel.filtrosSeleccionados.collectAsState()
+    val catTipoUbicaciones by viewModel.catFiltros.collectAsState()
 
     // Efectos
     LaunchedEffect(animarCamara) {
@@ -101,6 +101,7 @@ fun MapaScreen() {
 
     LaunchedEffect(Unit) {
         viewModel.cargarMarcadores()
+        viewModel.cargarCatFiltros()
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
         try {
@@ -249,6 +250,7 @@ fun MapaScreen() {
                 },
                 onCerrar = { mostrarDialogoFiltro = false },
                 filtrosSeleccionados = viewModel.filtrosSeleccionados.collectAsState().value,
+                catTipoUbicaciones = catTipoUbicaciones
             )
         }
     }

@@ -34,6 +34,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.tutorapp.data.model.CatTipoUbicacion
 import com.example.tutorapp.ui.theme.GrisClaro
 import com.example.tutorapp.ui.theme.PrincipalAqua
 import com.example.tutorapp.ui.theme.RojoUES
@@ -44,13 +45,9 @@ import kotlinx.coroutines.launch
 fun FiltroBottomSheet(
     onAplicar: (List<String>) -> Unit,
     onCerrar: () -> Unit,
-    filtrosSeleccionados: List<String>
+    filtrosSeleccionados: List<String>,
+    catTipoUbicaciones: List<CatTipoUbicacion>
 ) {
-    val opcionesBase = listOf(
-        "Facultad", "Salud", "Comedor", "Biblioteca",
-        "Auditorios", "Deportes", "Monumentos", "Investigacion"
-    )
-
     val filtrosSeleccionadosTemp = remember { mutableStateListOf<String>() }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -86,8 +83,9 @@ fun FiltroBottomSheet(
                     .fillMaxWidth()
                     .weight(1f)
             ) {
-                items(opcionesBase) { opcion ->
-                    val seleccionado = opcion in filtrosSeleccionadosTemp
+                items(catTipoUbicaciones) { opcion ->
+                    val nombre = opcion.nombre
+                    val seleccionado = nombre in filtrosSeleccionadosTemp
                     val chipColor = if (seleccionado) PrincipalAqua else PrincipalGris
                     Box(
                         modifier = Modifier
@@ -97,21 +95,21 @@ fun FiltroBottomSheet(
                             .clickable {
                                 if (seleccionado) {
                                     if (filtrosSeleccionadosTemp.size > 1) {
-                                        filtrosSeleccionadosTemp.remove(opcion)
+                                        filtrosSeleccionadosTemp.remove(nombre)
                                     } else {
                                         scope.launch {
                                             snackbarHostState.showSnackbar("Debe haber al menos un filtro seleccionado.")
                                         }
                                     }
                                 } else {
-                                    filtrosSeleccionadosTemp.add(opcion)
+                                    filtrosSeleccionadosTemp.add(nombre)
                                 }
                             }
                             .padding(vertical = 8.dp, horizontal = 12.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = opcion,
+                            text = nombre,
                             color = Color.White,
                             style = MaterialTheme.typography.bodyMedium
                         )

@@ -4,6 +4,7 @@ import com.example.tutorapp.data.model.MapaItem
 import com.example.tutorapp.data.network.RetrofitClient
 import android.util.Log
 import com.example.tutorapp.BuildConfig
+import com.example.tutorapp.data.model.CatTipoUbicacion
 import com.example.tutorapp.data.model.RutaResultado
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,15 @@ class MapaRepository {
     suspend fun getUbicaciones(tipos: List<String>): List<MapaItem> {
         return try {
             api.getUbicaciones(tipos)
+        } catch (e: Exception) {
+            Log.e("MapaRepository", "Error al llamar API", e)
+            emptyList()
+        }
+    }
+
+    suspend fun getCatFiltros(): List<CatTipoUbicacion> {
+        return try {
+            api.getTipoUbicacion()
         } catch (e: Exception) {
             Log.e("MapaRepository", "Error al llamar API", e)
             emptyList()
