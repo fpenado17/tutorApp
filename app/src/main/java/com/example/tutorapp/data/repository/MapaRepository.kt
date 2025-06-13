@@ -20,7 +20,7 @@ class MapaRepository {
         return try {
             api.getUbicaciones(tipos)
         } catch (e: Exception) {
-            Log.e("MapaRepository", "Error al llamar API", e)
+            Log.e("getUbicaciones", "Error al llamar API", e)
             emptyList()
         }
     }
@@ -29,7 +29,7 @@ class MapaRepository {
         return try {
             api.getTipoUbicacion()
         } catch (e: Exception) {
-            Log.e("MapaRepository", "Error al llamar API", e)
+            Log.e("getCatFiltros", "Error al llamar API", e)
             emptyList()
         }
     }
@@ -61,7 +61,7 @@ class MapaRepository {
 
                 RutaResultado(steps = steps, distancia = distancia, duracion = duracion)
             } catch (e: Exception) {
-                Log.e("MapaRepository", "Error al obtener ruta", e)
+                Log.e("getRuta", "Error al obtener ruta", e)
                 null
             }
         }

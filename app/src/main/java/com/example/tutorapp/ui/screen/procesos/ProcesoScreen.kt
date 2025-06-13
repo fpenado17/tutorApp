@@ -47,10 +47,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
 import com.example.tutorapp.ui.screen.procesos.components.SimpleList
 
 @Composable
-fun ProcesoScreen() {
+fun ProcesoScreen(navController: NavController) {
     val viewModel: ProcesosViewModel = viewModel()
     val query by viewModel.textoBusqueda.collectAsState()
     val niveles by viewModel.nivelProcesos.collectAsState()
@@ -179,7 +180,11 @@ fun ProcesoScreen() {
                     isLoading = procesosCargando,
                     timeoutReached = procesosTimeoutReached,
                     emptyMessage = "No se encontraron procesos.",
-                    onItemClick = {}
+                    onItemClick = { proceso ->
+                        val codigo = proceso.codigo
+                        val porFacultad = proceso.por_facultad.toString()
+                        navController.navigate("detalle_proceso/$codigo/$porFacultad")
+                    }
                 ) { proceso ->
                     Column {
                         Text(proceso.nombre, style = MaterialTheme.typography.titleMedium, color = Color.White)

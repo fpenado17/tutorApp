@@ -11,21 +11,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.tutorapp.ui.screen.informacion.InformacionScreen
 import com.example.tutorapp.ui.screen.mapas.MapaScreenConPermisos
+import com.example.tutorapp.ui.screen.procesos.DetalleProcesoScreen
 import com.example.tutorapp.ui.screen.procesos.ProcesoScreen
 import com.example.tutorapp.ui.screen.sesion.SesionScreen
 
 @Composable
 fun AppMainContent() {
     val navController = rememberNavController()
+    val currentBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry.value?.destination?.route
+
+    val showBottomBar = currentRoute != "detalle_proceso/{codigo}"
 
     Scaffold(
         topBar = {
             AppTopBar()
         },
         bottomBar = {
-            BottomNavBar(navController)
+            if (showBottomBar) {
+                BottomNavBar(navController)
+            }
         }
     ) { innerPadding ->
         NavHost(
@@ -34,7 +42,7 @@ fun AppMainContent() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("inicio") { InicioScreen() }
-            composable("procesos") { ProcesoScreen() }
+            composable("procesos") { ProcesoScreen(navController) }
             composable("mapas") { MapaScreenConPermisos() }
             //composable("sesion") {
             //    if (sesionIniciada(LocalContext.current)) UsuarioScreen() // UsuarioScreen()
@@ -42,6 +50,15 @@ fun AppMainContent() {
             // }
             composable("sesion") { SesionScreen() }
             composable("informacion") { InformacionScreen() }
+            composable("detalle_proceso/{codigo}/{porFacultad}") { backStackEntry ->
+                val codigo = backStackEntry.arguments?.getString("codigo") ?: ""
+                val porFacultad = backStackEntry.arguments?.getString("porFacultad")?.toBoolean() ?: false
+                DetalleProcesoScreen(
+                    codigo = codigo,
+                    porFacultad = porFacultad,
+                    onBack = { navController.popBackStack() }
+                )
+            }
         }
     }
 }
