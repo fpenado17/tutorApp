@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -48,7 +50,11 @@ import com.example.tutorapp.ui.theme.PrincipalAqua
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapaScreen() {
+fun MapaScreen(
+    codigoUbicacion: String? = null,
+    mostrarBotonBack: Boolean = false,
+    onBack: () -> Unit = {}
+) {
     // Variables
     val universidad = LatLng(13.715906106083413, -89.20337051153183)
     val cameraPositionState = rememberCameraPositionState {
@@ -126,6 +132,21 @@ fun MapaScreen() {
         }
     }
 
+    LaunchedEffect(codigoUbicacion, ubicaciones) {
+        if (!codigoUbicacion.isNullOrBlank()) {
+            val ubicacion = ubicaciones.firstOrNull { it.codigo == codigoUbicacion }
+            if (ubicacion != null) {
+                val latLng = LatLng(ubicacion.latitud, ubicacion.longitud)
+                cameraPositionState.animate(
+                    update = CameraUpdateFactory.newLatLngZoom(latLng, 19f),
+                    durationMs = 1000
+                )
+                ubicacionSeleccionada = ubicacion
+                mostrarInfoMapaDialog = true
+            }
+        }
+    }
+
     // Contenido
     Box(modifier = Modifier.fillMaxSize()) {
         // Mapa
@@ -180,6 +201,30 @@ fun MapaScreen() {
                 tint = Color.Black,
 
             )
+        }
+
+        if (mostrarBotonBack) {
+            FloatingActionButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(12.dp, 0.dp, 0.dp, 150.dp)
+                    .size(56.dp)
+                    .border(
+                        width = 1.dp,
+                        color = PrincipalAqua,
+                        shape = CircleShape
+                    )
+                    .clip(CircleShape),
+                containerColor = Color.White,
+                shape = CircleShape
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Volver",
+                    tint = Color.Black,
+                )
+            }
         }
 
         BusquedaBar(

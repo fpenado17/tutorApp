@@ -50,4 +50,9 @@ interface ApiService {
 
     @GET("public/facultades")
     suspend fun getFacultades(): List<Facultades>
+
+    @GET("public/procesos/")
+    suspend fun getProcesoBuscado(
+        @Query("top") top: Int? = null
+    ): List<Proceso>
 }

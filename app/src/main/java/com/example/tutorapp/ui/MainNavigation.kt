@@ -6,6 +6,8 @@ import InicioScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,10 +23,12 @@ import com.example.tutorapp.ui.screen.sesion.SesionScreen
 @Composable
 fun AppMainContent() {
     val navController = rememberNavController()
+    val selectedRootRoute = remember { mutableStateOf("inicio") }
     val currentBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry.value?.destination?.route
 
-    val showBottomBar = currentRoute != "detalle_proceso/{codigo}"
+    val showBottomBar = currentRoute?.startsWith("detalle_proceso") != true &&
+            currentRoute?.startsWith("mapa/") != true
 
     Scaffold(
         topBar = {
@@ -32,7 +36,19 @@ fun AppMainContent() {
         },
         bottomBar = {
             if (showBottomBar) {
-                BottomNavBar(navController)
+                BottomNavBar(
+                    rootRoute = selectedRootRoute.value,
+                    onRootRouteSelected = { route ->
+                        selectedRootRoute.value = route
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
             }
         }
     ) { innerPadding ->
@@ -41,7 +57,7 @@ fun AppMainContent() {
             startDestination = "inicio",
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("inicio") { InicioScreen() }
+            composable("inicio") { InicioScreen(navController) }
             composable("procesos") { ProcesoScreen(navController) }
             composable("mapas") { MapaScreenConPermisos() }
             //composable("sesion") {
@@ -49,6 +65,7 @@ fun AppMainContent() {
             //    else InicioSesionScreen() // InicioSesionScreen()
             // }
             composable("sesion") { SesionScreen() }
+
             composable("informacion") { InformacionScreen() }
             composable("detalle_proceso/{codigo}/{porFacultad}") { backStackEntry ->
                 val codigo = backStackEntry.arguments?.getString("codigo") ?: ""
@@ -56,6 +73,17 @@ fun AppMainContent() {
                 DetalleProcesoScreen(
                     codigo = codigo,
                     porFacultad = porFacultad,
+                    onBack = { navController.popBackStack() },
+                    navController = navController
+                )
+            }
+            composable("mapa/{codigoUbicacion}?back={back}") { backStackEntry ->
+                val codigoUbicacion = backStackEntry.arguments?.getString("codigoUbicacion")
+                val mostrarBotonBack = backStackEntry.arguments?.getString("back")?.toBoolean() ?: false
+
+                MapaScreenConPermisos(
+                    codigoUbicacion = codigoUbicacion,
+                    mostrarBotonBack = mostrarBotonBack,
                     onBack = { navController.popBackStack() }
                 )
             }

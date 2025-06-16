@@ -9,8 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.tutorapp.R
 import com.example.tutorapp.ui.theme.PrincipalAqua
 import com.example.tutorapp.ui.theme.PrincipalGris
@@ -19,7 +17,10 @@ import androidx.compose.ui.unit.dp
 data class BottomNavItem(val route: String, val icon: Painter, val label: String, val iconSelect: Painter,)
 
 @Composable
-fun BottomNavBar(navController: NavController) {
+fun BottomNavBar(
+    rootRoute: String,
+    onRootRouteSelected: (String) -> Unit
+) {
     val items = listOf(
         BottomNavItem("inicio", painterResource(R.drawable.ic_inicio), "Inicio", painterResource(R.drawable.ic_inicio_seleccionado)),
         BottomNavItem("procesos", painterResource(R.drawable.ic_academico), "Procesos", painterResource(R.drawable.ic_academico_seleccionado)),
@@ -28,14 +29,11 @@ fun BottomNavBar(navController: NavController) {
         BottomNavItem("informacion", painterResource(R.drawable.ic_otros), "Más", painterResource(R.drawable.ic_otros_seleccionado))
     )
 
-    val navBackStackEntry = navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry.value?.destination?.route
-
     NavigationBar(
         containerColor = PrincipalGris
     ) {
         items.forEach { item ->
-            val selected = currentRoute == item.route
+            val selected = rootRoute == item.route
 
             NavigationBarItem(
                 icon = {
@@ -50,15 +48,7 @@ fun BottomNavBar(navController: NavController) {
                 },
                 selected = selected,
                 onClick = {
-                    if (!selected) {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
+                    if (!selected) onRootRouteSelected(item.route)
                 },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = PrincipalGris,

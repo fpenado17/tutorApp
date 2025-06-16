@@ -21,10 +21,14 @@ import com.example.tutorapp.ui.screen.inicio.components.ImagenCarrusel
 import com.example.tutorapp.ui.screen.inicio.components.TarjetasCarrusel
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavController
 import com.example.tutorapp.ui.theme.RojoUES
 
 @Composable
-fun InicioScreen(viewModel: InicioViewModel = viewModel()) {
+fun InicioScreen(
+    navController: NavController,
+    viewModel: InicioViewModel = viewModel(),
+) {
     val generalItems = viewModel.generalItems.collectAsState()
     val procesosItems = viewModel.procesosItems.collectAsState()
 
@@ -33,7 +37,7 @@ fun InicioScreen(viewModel: InicioViewModel = viewModel()) {
 
     LaunchedEffect(Unit) {
         viewModel.getInformacionPorTipo("General")
-        viewModel.getInformacionPorTipo("Procesos", 10)
+        viewModel.getInformacionProceso(10)
     }
 
     LaunchedEffect(generalItems.value) {
@@ -82,7 +86,12 @@ fun InicioScreen(viewModel: InicioViewModel = viewModel()) {
             modifier = Modifier.padding(14.dp)
         )
         when {
-            procesosItems.value.isNotEmpty() -> TarjetasCarrusel(procesosItems.value)
+            procesosItems.value.isNotEmpty() -> TarjetasCarrusel(
+                procesosItems.value,
+                onProcesoClick = { proceso ->
+                    navController.navigate("detalle_proceso/${proceso.codigo}/${proceso.por_facultad}")
+                }
+            )
             procesosTimeoutReached -> Text(
                 "No se encontraron procesos.",
                 color = RojoUES,

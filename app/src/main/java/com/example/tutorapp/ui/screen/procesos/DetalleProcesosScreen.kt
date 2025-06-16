@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import com.example.tutorapp.data.model.Paso
 import com.example.tutorapp.ui.screen.procesos.components.ListFacultades
 import com.example.tutorapp.ui.screen.procesos.components.ListProcesoDetalle
@@ -43,8 +44,9 @@ import com.example.tutorapp.ui.theme.RojoUES
 fun DetalleProcesoScreen(
     codigo: String,
     porFacultad: Boolean,
-    onBack: () -> Unit)
-{
+    onBack: () -> Unit,
+    navController: NavController
+) {
     val viewModel: DetalleProcesoViewModel = viewModel(factory = object : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             @Suppress("UNCHECKED_CAST")
@@ -110,7 +112,8 @@ fun DetalleProcesoScreen(
             ) {
                 PasoBottomSheet(
                     paso = pasoSeleccionado!!,
-                    onCerrar = { mostrarBottomSheet = false }
+                    onCerrar = { mostrarBottomSheet = false },
+                    navController = navController
                 )
             }
         }

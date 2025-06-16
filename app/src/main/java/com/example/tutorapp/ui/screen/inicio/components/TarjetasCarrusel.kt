@@ -1,5 +1,6 @@
 package com.example.tutorapp.ui.screen.inicio.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,12 +26,16 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import com.example.tutorapp.data.model.Proceso
 import com.example.tutorapp.ui.theme.RojoIntenso
 import com.example.tutorapp.ui.theme.RojoUES
 import kotlinx.coroutines.delay
 
 @Composable
-fun TarjetasCarrusel(items: List<com.example.tutorapp.data.model.CarouselItem>) {
+fun TarjetasCarrusel(
+    items: List<Proceso>,
+    onProcesoClick: (Proceso) -> Unit
+) {
     val pagerState = rememberPagerState(initialPage = 0)
 
     LaunchedEffect(key1 = pagerState) {
@@ -54,7 +59,8 @@ fun TarjetasCarrusel(items: List<com.example.tutorapp.data.model.CarouselItem>) 
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxHeight()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable { onProcesoClick(item) },
             colors = CardDefaults.cardColors(containerColor = if (page % 2 == 0) RojoUES else RojoIntenso)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {

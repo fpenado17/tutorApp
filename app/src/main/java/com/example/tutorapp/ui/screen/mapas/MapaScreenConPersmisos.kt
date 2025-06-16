@@ -14,7 +14,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun MapaScreenConPermisos() {
+fun MapaScreenConPermisos(
+    codigoUbicacion: String? = null,
+    mostrarBotonBack: Boolean = false,
+    onBack: () -> Unit = {}
+) {
     val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
 
     LaunchedEffect(Unit) {
@@ -24,7 +28,11 @@ fun MapaScreenConPermisos() {
     }
 
     if (permissionState.status.isGranted) {
-        MapaScreen()
+        MapaScreen(
+            codigoUbicacion = codigoUbicacion,
+            mostrarBotonBack = mostrarBotonBack,
+            onBack = onBack
+        )
     } else {
         Box(
             modifier = Modifier.fillMaxSize(),

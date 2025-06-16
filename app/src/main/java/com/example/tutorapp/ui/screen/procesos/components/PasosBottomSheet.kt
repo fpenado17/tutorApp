@@ -29,18 +29,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.tutorapp.data.model.Paso
 import com.example.tutorapp.ui.theme.PrincipalAqua
 import com.example.tutorapp.ui.theme.PrincipalGris
 import com.example.tutorapp.ui.theme.RojoUES
 import com.example.tutorapp.ui.theme.SecundarioGris
+import com.example.tutorapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasoBottomSheet(
     paso: Paso,
-    onCerrar: () -> Unit
+    onCerrar: () -> Unit,
+    navController: NavController
 ) {
     val context = LocalContext.current
 
@@ -115,6 +119,26 @@ fun PasoBottomSheet(
         if (!paso.codigo_ubicacion.isNullOrBlank()) {
             Text("Ubicación:", style = MaterialTheme.typography.labelLarge)
             Text(paso.codigo_ubicacion, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("mapa/${paso.codigo_ubicacion}?back=true")
+                    onCerrar()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = RojoUES)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_mapa),
+                    contentDescription = "Ubicación",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Ver en el mapa")
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
         }
 
