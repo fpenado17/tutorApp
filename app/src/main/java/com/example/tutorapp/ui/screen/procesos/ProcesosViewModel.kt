@@ -7,6 +7,9 @@ import com.example.tutorapp.data.model.Proceso
 import com.example.tutorapp.data.repository.ProcesoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class ProcesosViewModel : ViewModel() {
@@ -38,6 +41,7 @@ class ProcesosViewModel : ViewModel() {
 
     init {
         cargarNiveles()
+        observarBusqueda()
     }
 
     fun cargarNiveles(sort: String =  "orden") {
@@ -60,6 +64,47 @@ class ProcesosViewModel : ViewModel() {
 
     fun busquedaProceso(nuevoTexto: String) {
         _textoBusqueda.value = nuevoTexto
+
+        _procesosCargando.value = true
+
+        if (nuevoTexto.isBlank()) {
+            _procesos.value = emptyList()
+            _procesosCargando.value = false
+            return
+        }
+    }
+
+    private fun observarBusqueda() {
+        viewModelScope.launch {
+            _textoBusqueda
+                .debounce(1000)
+                .distinctUntilChanged()
+                .collectLatest { texto ->
+                    if (texto.isBlank()) {
+                        _procesos.value = emptyList()
+                        return@collectLatest
+                    }
+
+                    _procesosCargando.value = true
+                    _procesosTimeoutReached.value = false
+
+                    try {
+                        val lista = if (_codigoSeleccionado.value.isNullOrBlank()) {
+                            repository.getProcesosBusqueda(texto)
+                        } else {
+                            repository.getProcesosBusquedaNivel(_codigoSeleccionado.value!!, texto)
+                        }
+
+                        _procesos.value = lista
+                        _procesosTimeoutReached.value = lista.isEmpty()
+                    } catch (e: Exception) {
+                        _procesos.value = emptyList()
+                        _procesosTimeoutReached.value = true
+                    } finally {
+                        _procesosCargando.value = false
+                    }
+                }
+        }
     }
 
     fun seleccionarCodigo(codigo: String) {

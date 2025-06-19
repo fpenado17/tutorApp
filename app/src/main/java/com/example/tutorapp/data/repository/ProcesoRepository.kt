@@ -54,4 +54,22 @@ class ProcesoRepository {
             emptyList()
         }
     }
+
+    suspend fun getProcesosBusquedaNivel(codigo_proceso: String, busqueda: String): List<Proceso> {
+        return try {
+            api.getProcesoDetalleBusquedaNivel(codigo_proceso, busqueda)
+        } catch (e: Exception) {
+            Log.e("getProcesosBusquedaNivel", "Error al llamar API", e)
+            emptyList()
+        }
+    }
+
+    suspend fun getProcesosBusqueda(busqueda: String): List<Proceso> {
+        return try {
+            api.getProcesoDetalleBusqueda(busqueda)
+        } catch (e: Exception) {
+            Log.e("getProcesosBusqueda", "Error al llamar API", e)
+            emptyList()
+        }
+    }
 }

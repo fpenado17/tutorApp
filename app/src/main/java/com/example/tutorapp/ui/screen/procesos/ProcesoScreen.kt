@@ -92,7 +92,7 @@ fun ProcesoScreen(navController: NavController) {
             ) {
                 OutlinedTextField(
                     value = query,
-                    onValueChange = { },
+                    onValueChange = { viewModel.busquedaProceso(it) },
                     modifier = Modifier
                         .weight(1f)
                         .height(44.dp),
@@ -130,7 +130,9 @@ fun ProcesoScreen(navController: NavController) {
                     },
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
-                        viewModel.busquedaProceso(query)
+                        if (query.isNotBlank()) {
+                            viewModel.busquedaProceso(query)
+                        }
                     })
                 )
 
@@ -149,7 +151,7 @@ fun ProcesoScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (codigoSeleccionado == null) {
+            if (codigoSeleccionado == null && query == "") {
                 SimpleList(
                     items = niveles,
                     isLoading = nivelesCargando,

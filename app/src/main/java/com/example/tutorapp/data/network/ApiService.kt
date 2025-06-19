@@ -48,6 +48,17 @@ interface ApiService {
         @Query("codigo_facultad") codigo_facultad: String,
     ): List<ProcesoDetalle>
 
+    @GET("public/procesos")
+    suspend fun getProcesoDetalleBusquedaNivel(
+        @Query("codigo_proceso") codigo_proceso: String,
+        @Query("tnombre_ilike") titulo_ilike: String,
+    ): List<Proceso>
+
+    @GET("public/procesos")
+    suspend fun getProcesoDetalleBusqueda(
+        @Query("nombre_ilike") titulo_ilike: String,
+    ): List<Proceso>
+
     @GET("public/facultades")
     suspend fun getFacultades(): List<Facultades>
 
