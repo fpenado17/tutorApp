@@ -84,7 +84,7 @@ fun InfoMapaDialog(
         ) {
             Text(
                 text = nombreUbicacion,
-                style = MaterialTheme.typography.headlineSmall.copy(color = RojoUES),
+                style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
@@ -124,7 +124,10 @@ fun InfoMapaDialog(
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Ruta")
+                    Text(
+                        "Ruta",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
                 }
             }
 

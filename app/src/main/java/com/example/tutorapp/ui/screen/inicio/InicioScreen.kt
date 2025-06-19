@@ -22,7 +22,6 @@ import com.example.tutorapp.ui.screen.inicio.components.TarjetasCarrusel
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
-import com.example.tutorapp.ui.theme.RojoUES
 
 @Composable
 fun InicioScreen(
@@ -67,7 +66,7 @@ fun InicioScreen(
             generalItems.value.isNotEmpty() -> ImagenCarrusel(generalItems.value)
             generalTimeoutReached -> Text(
                 "No se encontraron registros generales.",
-                color = RojoUES,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             else -> CircularProgressIndicator(
@@ -94,7 +93,7 @@ fun InicioScreen(
             )
             procesosTimeoutReached -> Text(
                 "No se encontraron procesos.",
-                color = RojoUES,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(start = 14.dp)
                     .align(Alignment.CenterHorizontally)

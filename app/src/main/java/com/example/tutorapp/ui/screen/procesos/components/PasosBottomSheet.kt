@@ -51,7 +51,7 @@ fun PasoBottomSheet(
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "${paso.orden} - ${paso.nombre}",
-            style = MaterialTheme.typography.headlineSmall.copy(color = RojoUES),
+            style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
@@ -136,7 +136,10 @@ fun PasoBottomSheet(
                     modifier = Modifier.size(20.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Ver en el mapa")
+                Text(
+                    "Ver en el mapa",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -166,7 +169,10 @@ fun PasoBottomSheet(
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Abrir enlace principal")
+                    Text(
+                        "Abrir enlace principal",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
                 }
             }
 

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -165,12 +166,12 @@ fun MapaScreen(
 
         // Opciones extras
         FloatingActionButton(
+            containerColor = Color.White.copy(alpha = 0.9f),
             onClick = { animarCamara = true },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(0.dp, 10.dp, 80.dp, 0.dp)
                 .size(42.dp),
-            containerColor = Color.White.copy(alpha = 0.8f)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_school),
@@ -181,6 +182,7 @@ fun MapaScreen(
         }
 
         FloatingActionButton(
+            containerColor = Color.White.copy(alpha = 0.9f),
             onClick = { mostrarDialogoFiltro = true },
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -192,7 +194,6 @@ fun MapaScreen(
                     shape = CircleShape
                 )
                 .clip(CircleShape),
-            containerColor = Color.White,
             shape = CircleShape
         ) {
             Icon(
@@ -205,6 +206,7 @@ fun MapaScreen(
 
         if (mostrarBotonBack) {
             FloatingActionButton(
+                containerColor = Color.White.copy(alpha = 0.9f),
                 onClick = onBack,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -216,7 +218,6 @@ fun MapaScreen(
                         shape = CircleShape
                     )
                     .clip(CircleShape),
-                containerColor = Color.White,
                 shape = CircleShape
             ) {
                 Icon(

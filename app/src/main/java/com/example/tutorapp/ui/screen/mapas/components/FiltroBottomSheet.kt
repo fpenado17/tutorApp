@@ -68,7 +68,7 @@ fun FiltroBottomSheet(
         ) {
             Text(
                 text = "Filtros",
-                style = MaterialTheme.typography.headlineSmall.copy(color = RojoUES),
+                style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
@@ -144,7 +144,10 @@ fun FiltroBottomSheet(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = RojoUES)
                 ) {
-                    Text("Aplicar")
+                    Text(
+                        "Aplicar",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
                 }
             }
 

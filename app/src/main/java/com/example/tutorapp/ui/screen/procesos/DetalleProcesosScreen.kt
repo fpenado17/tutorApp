@@ -14,6 +14,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -37,7 +38,6 @@ import com.example.tutorapp.ui.screen.procesos.components.ListFacultades
 import com.example.tutorapp.ui.screen.procesos.components.ListProcesoDetalle
 import com.example.tutorapp.ui.screen.procesos.components.PasoBottomSheet
 import com.example.tutorapp.ui.theme.PrincipalAqua
-import com.example.tutorapp.ui.theme.RojoUES
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,12 +85,12 @@ fun DetalleProcesoScreen(
                 }
                 porFacultad && detalles.isEmpty() && facultadSeleccionada.isNullOrBlank() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Seleccione una facultad", color = RojoUES)
+                        Text("Seleccione una facultad", color = MaterialTheme.colorScheme.primary)
                     }
                 }
                 detalles.isEmpty() -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("No se encontró información", color = RojoUES)
+                        Text("No se encontró información", color = MaterialTheme.colorScheme.primary)
                     }
                 }
                 else -> {
@@ -119,6 +119,7 @@ fun DetalleProcesoScreen(
         }
 
         FloatingActionButton(
+            containerColor = Color.White.copy(alpha = 0.9f),
             onClick = { onBack() },
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -126,7 +127,6 @@ fun DetalleProcesoScreen(
                 .size(56.dp)
                 .border(1.dp, PrincipalAqua, CircleShape)
                 .clip(CircleShape),
-            containerColor = Color.White,
             shape = CircleShape
         ) {
             Icon(
