@@ -36,6 +36,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tutorapp.R
 import com.example.tutorapp.common.startVoiceRecognition
@@ -165,12 +167,12 @@ fun MapaScreen(
 
         // Opciones extras
         FloatingActionButton(
+            containerColor = Color.White.copy(alpha = 0.9f),
             onClick = { animarCamara = true },
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(0.dp, 10.dp, 80.dp, 0.dp)
                 .size(42.dp),
-            containerColor = Color.White.copy(alpha = 0.8f)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_school),
@@ -181,6 +183,7 @@ fun MapaScreen(
         }
 
         FloatingActionButton(
+            containerColor = Color.White.copy(alpha = 0.9f),
             onClick = { mostrarDialogoFiltro = true },
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -192,7 +195,6 @@ fun MapaScreen(
                     shape = CircleShape
                 )
                 .clip(CircleShape),
-            containerColor = Color.White,
             shape = CircleShape
         ) {
             Icon(
@@ -205,6 +207,7 @@ fun MapaScreen(
 
         if (mostrarBotonBack) {
             FloatingActionButton(
+                containerColor = Color.White.copy(alpha = 0.9f),
                 onClick = onBack,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -216,7 +219,6 @@ fun MapaScreen(
                         shape = CircleShape
                     )
                     .clip(CircleShape),
-                containerColor = Color.White,
                 shape = CircleShape
             ) {
                 Icon(
@@ -266,9 +268,9 @@ fun MapaScreen(
     }
 
     if (mostrarDialogoBusqueda) {
-        ModalBottomSheet(
+        Dialog(
             onDismissRequest = { mostrarDialogoBusqueda = false },
-            sheetState = sheetState
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             BusquedaBottomSheet(
                 listaUbicaciones = ubicaciones,

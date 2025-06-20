@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.tutorapp.data.model.Paso
 import com.example.tutorapp.data.model.ProcesoDetalle
-import com.example.tutorapp.ui.theme.RojoUES
 
 @Composable
 fun ListProcesoDetalle(
@@ -30,7 +29,7 @@ fun ListProcesoDetalle(
             item {
                 Text(
                     text = detalle.titulo,
-                    style = MaterialTheme.typography.headlineSmall.copy(color = RojoUES),
+                    style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally)

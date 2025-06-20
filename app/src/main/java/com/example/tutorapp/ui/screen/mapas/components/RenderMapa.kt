@@ -8,6 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import android.content.Context
+import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.tutorapp.R
 import com.example.tutorapp.common.decodePolyline
 import com.example.tutorapp.common.getBitmapDescriptorFromVector
@@ -33,8 +34,11 @@ fun RenderMapa(
     rutaSteps: List<String>,
     onMarkerClick: (MapaItem) -> Unit
 ) {
-    val mapStyleOptions = remember {
-        MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_no_pois)
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val mapStyleOptions = remember(isDarkTheme) {
+        val styleRes = if (isDarkTheme) R.raw.map_style_dark else R.raw.map_style_no_pois
+        MapStyleOptions.loadRawResourceStyle(context, styleRes)
     }
 
     GoogleMap(

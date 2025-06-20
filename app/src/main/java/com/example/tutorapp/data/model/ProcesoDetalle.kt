@@ -19,7 +19,8 @@ data class Paso(
     val documento: List<Documento>,
     val codigo_ubicacion: String,
     val costo: String,
-    val url: String
+    val url: String,
+    val imagen: List<String>,
 )
 
 data class Documento(

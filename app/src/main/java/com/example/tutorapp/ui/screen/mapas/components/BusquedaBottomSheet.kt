@@ -3,6 +3,7 @@ package com.example.tutorapp.ui.screen.mapas.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -71,8 +73,31 @@ fun BusquedaBottomSheet(
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.9f)
+        .background(MaterialTheme.colorScheme.background)
         .padding(16.dp)
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Cerrar",
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .clickable { onCerrar() }
+                    .padding(end = 8.dp)
+            )
+            Text(
+                text = "Detalles",
+                style = MaterialTheme.typography.titleMedium.copy(MaterialTheme.colorScheme.primary)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -178,24 +203,33 @@ fun BusquedaBottomSheet(
                         inactiveColor = Color.White.copy(alpha = 0.3f)
                     )
 
+                    val isDarkTheme = isSystemInDarkTheme()
+                    val tieneImagen = ubicacion.imagenes.any { it.isNotBlank() }
+
+                    val textoColor = if (isDarkTheme) {
+                        if (tieneImagen) Color.Black else Color.White
+                    } else {
+                        Color.White
+                    }
+
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.3f))
+                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f))
                             .padding(16.dp),
                         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
                     ) {
                         Text(
                             text = ubicacion.nombre,
                             style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
+                            color = textoColor
                         )
                         Text(
                             text = ubicacion.tipo,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.White.copy(alpha = 0.9f)
+                            color = textoColor
                         )
                     }
                 }

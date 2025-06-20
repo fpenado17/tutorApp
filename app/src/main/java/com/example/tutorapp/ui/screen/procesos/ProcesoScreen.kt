@@ -205,6 +205,7 @@ fun ProcesoScreen(navController: NavController) {
         }
         if (codigoSeleccionado != null) {
             FloatingActionButton(
+                containerColor = Color.White.copy(alpha = 0.9f),
                 onClick = { viewModel.limpiarSeleccion() },
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -216,7 +217,6 @@ fun ProcesoScreen(navController: NavController) {
                         shape = CircleShape
                     )
                     .clip(CircleShape),
-                containerColor = Color.White,
                 shape = CircleShape
             ) {
                 Icon(

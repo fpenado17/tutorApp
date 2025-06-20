@@ -35,8 +35,8 @@ fun ListFacultades(
         items(facultades.size) { index ->
             val facultad = facultades[index]
             val seleccionada = facultad.codigo == facultadSeleccionada
-            val backgroundColor = if (seleccionada) RojoUES else Color.Transparent
-            val borderColor = if (seleccionada) RojoUES else Color.Gray
+            val backgroundColor = if (seleccionada) RojoUES else Color.White
+            val borderColor = if (seleccionada) MaterialTheme.colorScheme.primary else Color.Gray
 
             Box(
                 modifier = Modifier

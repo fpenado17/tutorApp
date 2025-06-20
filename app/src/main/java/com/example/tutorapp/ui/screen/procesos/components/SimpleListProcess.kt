@@ -24,13 +24,14 @@ import com.example.tutorapp.ui.theme.SecundarioGris
 
 @Composable
 fun <T> SimpleList(
+    small: Boolean = false,
     items: List<T>,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     timeoutReached: Boolean = false,
     emptyMessage: String = "No hay datos.",
     onItemClick: (T) -> Unit = {},
-    itemContent: @Composable (T) -> Unit
+    itemContent: @Composable (T) -> Unit,
 ) {
     when {
         isLoading -> {
@@ -72,7 +73,7 @@ fun <T> SimpleList(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(80.dp)
+                            .height(if (small) 60.dp else 80.dp)
                             .clickable { onItemClick(item) }
                             .clip(RoundedCornerShape(12.dp))
                             .background(backgroundColor)

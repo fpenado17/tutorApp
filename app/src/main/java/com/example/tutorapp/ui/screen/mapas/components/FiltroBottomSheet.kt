@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -28,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.tutorapp.ui.theme.PrincipalGris
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -64,11 +67,12 @@ fun FiltroBottomSheet(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
             Text(
                 text = "Filtros",
-                style = MaterialTheme.typography.headlineSmall.copy(color = RojoUES),
+                style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
@@ -82,6 +86,7 @@ fun FiltroBottomSheet(
                     .padding(12.dp)
                     .fillMaxWidth()
                     .weight(1f)
+                    .heightIn(max = 500.dp)
             ) {
                 items(catTipoUbicaciones) { opcion ->
                     val nombre = opcion.nombre
@@ -144,7 +149,10 @@ fun FiltroBottomSheet(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = RojoUES)
                 ) {
-                    Text("Aplicar")
+                    Text(
+                        "Aplicar",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
                 }
             }
 

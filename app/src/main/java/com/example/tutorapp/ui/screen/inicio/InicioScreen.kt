@@ -3,6 +3,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,6 @@ import com.example.tutorapp.ui.screen.inicio.components.TarjetasCarrusel
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
-import com.example.tutorapp.ui.theme.RojoUES
 
 @Composable
 fun InicioScreen(
@@ -54,7 +55,12 @@ fun InicioScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 16.dp),
+    ) {
 
         Text(
             "Bienvenido a TutorApp",
@@ -67,7 +73,7 @@ fun InicioScreen(
             generalItems.value.isNotEmpty() -> ImagenCarrusel(generalItems.value)
             generalTimeoutReached -> Text(
                 "No se encontraron registros generales.",
-                color = RojoUES,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             else -> CircularProgressIndicator(
@@ -94,7 +100,7 @@ fun InicioScreen(
             )
             procesosTimeoutReached -> Text(
                 "No se encontraron procesos.",
-                color = RojoUES,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(start = 14.dp)
                     .align(Alignment.CenterHorizontally)
