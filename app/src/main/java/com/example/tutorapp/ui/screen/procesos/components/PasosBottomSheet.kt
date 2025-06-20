@@ -2,6 +2,7 @@ package com.example.tutorapp.ui.screen.procesos.components
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.Button
@@ -24,20 +27,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.tutorapp.data.model.Paso
 import com.example.tutorapp.ui.theme.PrincipalAqua
 import com.example.tutorapp.ui.theme.PrincipalGris
 import com.example.tutorapp.ui.theme.RojoUES
 import com.example.tutorapp.ui.theme.SecundarioGris
 import com.example.tutorapp.R
+import com.example.tutorapp.ui.screen.mapas.components.ImagenFullScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,8 +58,14 @@ fun PasoBottomSheet(
     navController: NavController
 ) {
     val context = LocalContext.current
+    var imagenSeleccionada by remember { mutableStateOf<String?>(null) }
+    val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
         Text(
             text = "${paso.orden} - ${paso.nombre}",
             style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
@@ -152,6 +169,27 @@ fun PasoBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
+        if (paso.imagen.isNotEmpty()) {
+            Text("Imagenes:", style = MaterialTheme.typography.labelLarge)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            paso.imagen.forEachIndexed { index, imagen ->
+                Column {
+                    Image(
+                        painter = rememberAsyncImagePainter(imagen),
+                        contentDescription = "Imagen $index",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clickable { imagenSeleccionada = imagen },
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
         if (!paso.url.isNullOrBlank()) {
             Button(
                 onClick = {
@@ -177,6 +215,16 @@ fun PasoBottomSheet(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+
+    // Dialogos
+    if (imagenSeleccionada != null) {
+        Dialog(onDismissRequest = { imagenSeleccionada = null }) {
+            ImagenFullScreen(
+                url = imagenSeleccionada!!,
+                onClose = { imagenSeleccionada = null }
+            )
         }
     }
 }

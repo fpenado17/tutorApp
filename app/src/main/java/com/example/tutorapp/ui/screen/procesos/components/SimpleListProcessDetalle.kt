@@ -81,6 +81,10 @@ fun PasoList(
                         if (!paso.codigo_ubicacion.isNullOrBlank()) {
                             InfoTag(text = "Ubicación", fondo = PrincipalAqua, color = Color.White)
                         }
+
+                        if (!paso.imagen.isNullOrEmpty()) {
+                            InfoTag(text = "Imagenes: ${paso.imagen.size}", fondo = PrincipalAqua, color = Color.White)
+                        }
                     }
                 }
             }

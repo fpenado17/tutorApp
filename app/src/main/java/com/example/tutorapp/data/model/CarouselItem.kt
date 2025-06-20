@@ -6,5 +6,7 @@ data class CarouselItem(
     val descripcion: String? = null,
     val imagen: String? = null,
     val tipo: String? = null,
-    val busqueda: Number? = null
+    val busqueda: Number? = null,
+    val url: String? = null,
+    val numero: String? = null,
 )
