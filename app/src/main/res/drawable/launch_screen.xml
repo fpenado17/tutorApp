@@ -5,8 +5,8 @@
 
     <item>
         <bitmap
-            android:gravity="fill"
-            android:src="@mipmap/ic_tutor_app_foreground" />
+            android:gravity="center"
+            android:src="@drawable/tutor_app_logo" />
     </item>
 
 </layer-list>
