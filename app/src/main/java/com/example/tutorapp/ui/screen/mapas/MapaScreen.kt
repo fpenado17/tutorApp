@@ -36,6 +36,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tutorapp.R
 import com.example.tutorapp.common.startVoiceRecognition
@@ -266,9 +268,9 @@ fun MapaScreen(
     }
 
     if (mostrarDialogoBusqueda) {
-        ModalBottomSheet(
+        Dialog(
             onDismissRequest = { mostrarDialogoBusqueda = false },
-            sheetState = sheetState
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             BusquedaBottomSheet(
                 listaUbicaciones = ubicaciones,

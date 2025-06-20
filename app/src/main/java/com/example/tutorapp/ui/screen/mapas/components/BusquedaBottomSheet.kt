@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -72,8 +73,31 @@ fun BusquedaBottomSheet(
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.9f)
+        .background(MaterialTheme.colorScheme.background)
         .padding(16.dp)
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Cerrar",
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .clickable { onCerrar() }
+                    .padding(end = 8.dp)
+            )
+            Text(
+                text = "Detalles",
+                style = MaterialTheme.typography.titleMedium.copy(MaterialTheme.colorScheme.primary)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),

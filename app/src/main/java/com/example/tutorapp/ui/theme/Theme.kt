@@ -19,7 +19,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = GrisOscuro,
     onSurface = Color.White,
     secondary = PrincipalAquaDark,
-    onSecondary = Color.Black,
+    onSecondary = Color.White,
     surfaceVariant = Color.White,
     secondaryContainer= Color.White
 )

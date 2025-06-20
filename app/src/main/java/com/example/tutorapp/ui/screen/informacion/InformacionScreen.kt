@@ -1,5 +1,6 @@
 package com.example.tutorapp.ui.screen.informacion
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tutorapp.ui.screen.informacion.components.TarjetaInformacion
 import com.example.tutorapp.ui.screen.procesos.components.SimpleList
@@ -46,7 +47,6 @@ fun InformacionScreen() {
     val seccionSeleccionado by viewModel.seccionSeleccionado.collectAsState()
     val infoItems by viewModel.infoItems.collectAsState()
     var mostrarBottomSheet by remember { mutableStateOf(false) }
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val infoCargando by viewModel.infoCargando.collectAsState()
     val infoTimeoutReached by viewModel.infoTimeoutReached.collectAsState()
     val detalleSeleccionado by viewModel.detalleSeleccionado.collectAsState()
@@ -123,11 +123,19 @@ fun InformacionScreen() {
     }
 
     if (mostrarBottomSheet && detalleSeleccionado != {}) {
-        ModalBottomSheet(
+        Dialog(
             onDismissRequest = { mostrarBottomSheet = false },
-            sheetState = bottomSheetState
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            DetalleBottomSheet(detalleSeleccionado)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                DetalleBottomSheet(detalleSeleccionado) {
+                    mostrarBottomSheet = false
+                }
+            }
         }
     }
 }
