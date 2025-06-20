@@ -22,7 +22,7 @@ import com.example.tutorapp.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(darkTheme: Boolean = isSystemInDarkTheme()) {
-    val logo = if (darkTheme) R.drawable.tutor_app_logo_blanco else R.drawable.tutor_app_logo
+    val logo = if (darkTheme) R.drawable.tutor_app_logo_blanco_small else R.drawable.tutor_app_logo_small
     TopAppBar(
         title = {
             Row(
